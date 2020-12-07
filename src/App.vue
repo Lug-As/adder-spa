@@ -14,6 +14,7 @@
                      v-for="link in links"
                      :to="link.url"
                      :key="link.title"
+                     :exact="link.exact"
         >
           <v-list-item-icon>
             <v-icon>{{ link.icon }}</v-icon>
@@ -26,7 +27,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app :color="mainColor">
+    <v-app-bar app :color="mainColor" dark>
       <v-app-bar-nav-icon @click="toggleDrawer" class="hidden-md-and-up"></v-app-bar-nav-icon>
       <v-toolbar-title>Adder</v-toolbar-title>
 
@@ -37,9 +38,15 @@
                v-for="link in links"
                :to="link.url"
                :key="link.title"
+               :exact="link.exact"
         >
           <v-icon left>{{ link.icon }}</v-icon>
           {{ link.title }}
+        </v-btn>
+        <v-btn color="transparent" elevation="0"
+               @click="toggleTheme"
+        >
+          <v-icon>mdi-theme-light-dark</v-icon>
         </v-btn>
       </v-toolbar-items>
     </v-app-bar>
@@ -58,17 +65,66 @@ export default {
   data: () => ({
     drawer: false,
     links: [
-      { title: 'Login', icon: 'mdi-login-variant', url: '/login' },
-      { title: 'Sign Up', icon: 'mdi-face-outline', url: '/signup' },
-      { title: 'Orders', icon: 'mdi-bookmark-outline', url: '/orders' },
-      { title: 'New offer', icon: 'mdi-note-plus-outline', url: '/new' },
-      { title: 'My offers', icon: 'mdi-view-list-outline', url: '/list' }
+      {
+        title: 'Home',
+        icon: 'mdi-home',
+        exact: true,
+        url: {
+          name: 'Home'
+        }
+      },
+      {
+        title: 'Login',
+        icon: 'mdi-login-variant',
+        url: {
+          name: 'Login'
+        }
+      },
+      {
+        title: 'Sign Up',
+        icon: 'mdi-face-outline',
+        url: {
+          name: 'SignUp'
+        }
+      },
+      {
+        title: 'Orders',
+        icon: 'mdi-bookmark-outline',
+        url: {
+          name: 'Orders'
+        }
+      },
+      {
+        title: 'New offer',
+        icon: 'mdi-note-plus-outline',
+        url: {
+          name: 'NewOffer'
+        }
+      },
+      {
+        title: 'My offers',
+        icon: 'mdi-view-list-outline',
+        url: {
+          name: 'OfferList'
+        }
+      }
     ],
     mainColor: 'blue darken-1'
   }),
   methods: {
     toggleDrawer () {
       this.drawer = !this.drawer
+    },
+    toggleTheme () {
+      const newTheme = !this.$vuetify.theme.dark
+      this.$vuetify.theme.dark = newTheme
+      localStorage.setItem('themeDark', newTheme)
+    }
+  },
+  mounted () {
+    const themeDark = localStorage.getItem('themeDark')
+    if (themeDark) {
+      this.$vuetify.theme.dark = themeDark
     }
   }
 }
