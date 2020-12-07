@@ -34,7 +34,7 @@
       <v-spacer></v-spacer>
 
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn color="transparent" elevation="0"
+        <v-btn text
                v-for="link in links"
                :to="link.url"
                :key="link.title"
@@ -43,8 +43,7 @@
           <v-icon left>{{ link.icon }}</v-icon>
           {{ link.title }}
         </v-btn>
-        <v-btn color="transparent" elevation="0"
-               @click="toggleTheme"
+        <v-btn text @click="toggleTheme"
         >
           <v-icon>{{ themeIcon }}</v-icon>
         </v-btn>

@@ -37,7 +37,7 @@
               >
                 <v-icon slot="prepend">mdi-lock</v-icon>
                 <v-btn slot="append"
-                       color="transparent" elevation="0"
+                       text
                        fab small
                        @click.stop.prevent="togglePasswordVisible"
                        tabindex="-1"
@@ -54,7 +54,7 @@
               >
                 <v-icon slot="prepend">mdi-lock</v-icon>
                 <v-btn slot="append"
-                       color="transparent" elevation="0"
+                       text
                        fab small
                        @click.stop.prevent="toggleCPasswordVisible"
                        tabindex="-1"
