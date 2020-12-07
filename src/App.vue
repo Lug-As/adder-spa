@@ -46,13 +46,13 @@
         <v-btn color="transparent" elevation="0"
                @click="toggleTheme"
         >
-          <v-icon>mdi-theme-light-dark</v-icon>
+          <v-icon>{{ themeIcon }}</v-icon>
         </v-btn>
       </v-toolbar-items>
     </v-app-bar>
 
     <v-main>
-      <v-container fluid>
+      <v-container fluid fill-height>
         <router-view></router-view>
       </v-container>
     </v-main>
@@ -75,41 +75,41 @@ export default {
       },
       {
         title: 'Login',
-        icon: 'mdi-login-variant',
+        icon: 'mdi-login',
         url: {
           name: 'Login'
         }
       },
       {
         title: 'Sign Up',
-        icon: 'mdi-face-outline',
+        icon: 'mdi-face',
         url: {
           name: 'SignUp'
         }
       },
       {
         title: 'Orders',
-        icon: 'mdi-bookmark-outline',
+        icon: 'mdi-bookmark',
         url: {
           name: 'Orders'
         }
       },
       {
         title: 'New offer',
-        icon: 'mdi-note-plus-outline',
+        icon: 'mdi-note-plus',
         url: {
           name: 'NewOffer'
         }
       },
       {
         title: 'My offers',
-        icon: 'mdi-view-list-outline',
+        icon: 'mdi-view-list',
         url: {
           name: 'OfferList'
         }
       }
     ],
-    mainColor: 'blue darken-1'
+    mainColor: 'blue'
   }),
   methods: {
     toggleDrawer () {
@@ -118,11 +118,19 @@ export default {
     toggleTheme () {
       const newTheme = !this.$vuetify.theme.dark
       this.$vuetify.theme.dark = newTheme
-      localStorage.setItem('themeDark', newTheme)
+      localStorage.setItem('themeDark', +newTheme)
+    }
+  },
+  computed: {
+    themeIcon () {
+      if (!this.$vuetify.theme.dark) {
+        return 'mdi-weather-night'
+      }
+      return 'mdi-white-balance-sunny'
     }
   },
   mounted () {
-    const themeDark = localStorage.getItem('themeDark')
+    const themeDark = !!+(localStorage.getItem('themeDark'))
     if (themeDark) {
       this.$vuetify.theme.dark = themeDark
     }
