@@ -7,9 +7,10 @@
           show-arrows-on-hover
           hide-delimiters
           height="400"
+          cycle
         >
           <v-carousel-item
-            v-for="(item, key) in items"
+            v-for="(item, key) in promoOffers"
             :key="key"
             :src="item.src"
             :to="item.link"
@@ -26,7 +27,7 @@
         <h2 class="text-center heading mt-4">All Offers</h2>
       </v-col>
       <v-col
-        v-for="(item, key) in items"
+        v-for="(item, key) in offers"
         :key="key"
         md="4"
         sm="6"
@@ -63,30 +64,14 @@
 
 <script>
 export default {
-  data: () => ({
-    items: [
-      {
-        src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-        title: 'Consectetur adipisicing elit. Labore.',
-        link: '/offer/1'
-      },
-      {
-        src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
-        title: 'Lorem ipsum ad, nemo.',
-        link: '/offer/2'
-      },
-      {
-        src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
-        title: 'Fugit, quae! Lorem ipsum dolor amet.',
-        link: '/offer/3'
-      },
-      {
-        src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
-        title: 'Lorem ipsum cum, explicabo.',
-        link: '/offer/4'
-      }
-    ]
-  })
+  computed: {
+    promoOffers () {
+      return this.$store.getters.promoOffers
+    },
+    offers () {
+      return this.$store.getters.offers
+    }
+  }
 }
 </script>
 

@@ -9,7 +9,7 @@
         </v-row>
         <v-row>
           <v-col xs="12" md="6" offset-md="3"
-                 v-for="(item, index) of items"
+                 v-for="(item, index) of myOffers"
                  :key="index"
           >
             <v-hover v-slot="{ hover }">
@@ -60,34 +60,11 @@
 
 <script>
 export default {
-  data: () => ({
-    items: [
-      {
-        src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-        title: 'Consectetur adipisicing elit. Labore.',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda deserunt eligendi iste molestias necessitatibus nostrum odit quam quod sed voluptatem.',
-        link: '/offer/1'
-      },
-      {
-        src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
-        title: 'Lorem ipsum ad, nemo.Lorem ipsum ad, nemo.',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda deserunt eligendi iste molestias necessitatibus nostrum odit quam quod sed voluptatem.',
-        link: '/offer/2'
-      },
-      {
-        src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
-        title: 'Fugit, quae! Lorem ipsum dolor amet.',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda deserunt eligendi iste molestias necessitatibus nostrum odit quam quod sed voluptatem.',
-        link: '/offer/3'
-      },
-      {
-        src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
-        title: 'Lorem ipsum cum, explicabo.',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda deserunt eligendi iste molestias necessitatibus nostrum odit quam quod sed voluptatem.',
-        link: '/offer/4'
-      }
-    ]
-  }),
+  computed: {
+    myOffers () {
+      return this.$store.getters.userOffers
+    }
+  },
   filters: {
     shortDesc (desc) {
       const maxChars = 108
@@ -115,6 +92,7 @@ export default {
 .offer-card {
   cursor: auto;
 }
+
 .pointer {
   cursor: pointer;
 }
