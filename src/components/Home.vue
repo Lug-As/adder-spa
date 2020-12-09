@@ -13,7 +13,7 @@
             v-for="(item, key) in promoOffers"
             :key="key"
             :src="item.src"
-            :to="item.link"
+            :to="offerLink(item.id)"
           >
             <v-layout fill-height justify-center align-end>
               <h3 class="text-center text-md-h6 mb-4 offer-title">{{ item.title }}</h3>
@@ -34,7 +34,7 @@
         xs="12"
       >
         <v-card>
-          <router-link :to="item.link" tag="div" class="pointer">
+          <router-link :to="offerLink(item.id)" tag="div" class="pointer">
             <v-img
               height="200px"
               :src="item.src"
@@ -42,7 +42,10 @@
           </router-link>
 
           <v-card-title class="pb-0">
-            <router-link :to="item.link" tag="span" class="pointer">{{ item.title }}</router-link>
+            <router-link :to="offerLink(item.id)" tag="span" class="pointer">{{
+                item.title
+              }}
+            </router-link>
           </v-card-title>
 
           <v-card-text class="text--primary">
@@ -52,7 +55,7 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text :to="item.link">Open</v-btn>
+            <v-btn text :to="offerLink(item.id)">Open</v-btn>
 
             <v-btn color="blue" dark>Buy</v-btn>
           </v-card-actions>
@@ -63,6 +66,8 @@
 </template>
 
 <script>
+import { offerLinkMixin } from '@/mixins'
+
 export default {
   computed: {
     promoOffers () {
@@ -71,7 +76,8 @@ export default {
     offers () {
       return this.$store.getters.offers
     }
-  }
+  },
+  mixins: [offerLinkMixin]
 }
 </script>
 
@@ -80,6 +86,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
   padding: 10px 5px 7px;
 }
+
 .pointer {
   cursor: pointer;
 }

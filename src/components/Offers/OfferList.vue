@@ -16,7 +16,7 @@
               <v-card :elevation="hover ? 10 : 2" hover class="offer-card">
                 <v-row>
                   <v-col cols="3">
-                    <router-link :to="item.link">
+                    <router-link :to="offerLink(item.id)">
                       <v-avatar
                         class="ml-3 mt-2"
                         size="145"
@@ -30,7 +30,8 @@
                     <v-card-title
                       class="text-h6 pb-2"
                     >
-                      <router-link :to="item.link" tag="span" class="text-truncate pointer">
+                      <router-link :to="offerLink(item.id)" tag="span"
+                                   class="text-truncate pointer">
                         {{ item.title | shortTitle }}
                       </router-link>
                     </v-card-title>
@@ -43,7 +44,7 @@
                       <v-btn
                         color="blue"
                         dark
-                        :to="item.link"
+                        :to="offerLink(item.id)"
                       >
                         Open
                       </v-btn>
@@ -60,6 +61,8 @@
 </template>
 
 <script>
+import { offerLinkMixin } from '@/mixins'
+
 export default {
   computed: {
     myOffers () {
@@ -85,7 +88,8 @@ export default {
       }
       return str
     }
-  }
+  },
+  mixins: [offerLinkMixin]
 }
 </script>
 
