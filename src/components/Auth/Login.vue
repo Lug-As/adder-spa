@@ -42,7 +42,8 @@
                    :dark="!$v.$invalid"
                    :disabled="$v.$invalid"
                    @click.prevent="submitLoginForm"
-            >Enter</v-btn>
+            >Enter
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -82,7 +83,7 @@ export default {
     passwordErrors () {
       const errors = []
       if (!this.$v.password.$dirty) return errors
-      !this.$v.password.minLength && errors.push('Must be min 6 chars')
+      !this.$v.password.minLength && errors.push('Must be min ' + this.$v.password.$params.minLength.min + ' chars')
       !this.$v.password.required && errors.push('Password is required')
       return errors
     },

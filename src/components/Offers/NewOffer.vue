@@ -1,16 +1,127 @@
 <template>
-  <v-container>
-    <v-layout row>
-      <v-flex xs12>
-        <h1>New Offer</h1>
+  <v-container fluid fill-height>
+    <v-layout>
+      <v-flex>
+        <v-row>
+          <v-col xs="12">
+            <h2 class="text-h4 text-center text--secondary">New Offer</h2>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col xs="12" md="6" offset-md="3">
+            <v-form @submit.prevent="">
+              <v-text-field
+                class="mb-5"
+                v-model="title"
+                :error-messages="titleErrors"
+                :counter="$v.title.$params.maxLength.max"
+                label="Title"
+                required
+                @blur="$v.title.$touch()"
+                autocomplete="off"
+              ></v-text-field>
+              <v-textarea
+                clearable
+                v-model="description"
+                :error-messages="descriptionErrors"
+                :counter="$v.description.$params.maxLength.max"
+                outlined
+                label="Description"
+                auto-grow
+                required
+                @blur="$v.description.$touch()"
+              ></v-textarea>
+              <v-switch
+                v-model="promo"
+                label="Add to promo?"
+              ></v-switch>
+              <v-row>
+                <v-btn
+                  color="green"
+                  dark
+                >
+                  Upload
+                  <v-icon
+                    right
+                    dark
+                  >
+                    mdi-cloud-upload
+                  </v-icon>
+                </v-btn>
+              </v-row>
+              <v-row class="mt-3 mb-5">
+                <v-img
+                  max-height="200"
+                  max-width="200"
+                  src=""></v-img>
+              </v-row>
+
+              <v-row>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="blue"
+                  @click="createOffer"
+                  :disabled="$v.$invalid"
+                  :dark="!$v.$invalid"
+                >
+                  Create Offer
+                </v-btn>
+              </v-row>
+            </v-form>
+          </v-col>
+        </v-row>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
+import { required, maxLength } from 'vuelidate/lib/validators'
+
 export default {
-  data: () => ({})
+  data: () => ({
+    title: '',
+    description: '',
+    promo: false
+  }),
+  methods: {
+    createOffer () {
+      if (!this.$v.$invalid) {
+        const offer = {
+          title: this.title,
+          description: this.description,
+          promo: this.promo
+        }
+        console.log(offer)
+      }
+    }
+  },
+  computed: {
+    titleErrors () {
+      const errors = []
+      if (!this.$v.title.$dirty) return errors
+      !this.$v.title.required && errors.push('Title is required')
+      !this.$v.title.maxLength && errors.push('Must be max 6 chars')
+      return errors
+    },
+    descriptionErrors () {
+      const errors = []
+      if (!this.$v.description.$dirty) return errors
+      !this.$v.description.required && errors.push('Description is required')
+      !this.$v.description.maxLength && errors.push('Must be max 6 chars')
+      return errors
+    }
+  },
+  validations: {
+    title: {
+      required,
+      maxLength: maxLength(30)
+    },
+    description: {
+      required,
+      maxLength: maxLength(2000)
+    }
+  }
 }
 </script>
 
