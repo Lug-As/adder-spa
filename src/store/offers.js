@@ -46,9 +46,20 @@ export default {
       return state.offers
     },
     offerById (state) {
-      return id => state.offers.find(offer => offer.id === id)
+      return id => state.offers.find(offer => String(offer.id) === String(id))
     }
   },
-  mutations: {},
-  actions: {}
+  mutations: {
+    createOffer (state, newOffer) {
+      state.offers.push(newOffer)
+    }
+  },
+  actions: {
+    createOffer ({ commit }, newOffer) {
+      const id = '9999'
+      newOffer.id = id
+      newOffer.link = '/offer/' + id
+      commit('createOffer', newOffer)
+    }
+  }
 }

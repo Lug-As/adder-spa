@@ -64,6 +64,7 @@ export default {
   }),
   computed: {
     item () {
+      console.log(this.$store.getters.offerById(this.id))
       return this.$store.getters.offerById(this.id)
     }
   }
