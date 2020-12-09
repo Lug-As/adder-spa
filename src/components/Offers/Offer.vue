@@ -5,9 +5,10 @@
         <v-row>
           <v-col md="9">
             <v-card>
-              <div class="offer-image">
+              <div class="offer-image text-center">
                 <silent-box
-                  :image="{src: item.src, thumbnailHeight: 380}"
+                  :image="{src: item.src, thumbnailHeight: 400}"
+                  style="margin-bottom: -7px;"
                 ></silent-box>
               </div>
               <div class="card-body">
@@ -47,13 +48,8 @@
 
 <script>
 export default {
+  props: ['id'],
   data: () => ({
-    item: {
-      src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-      title: 'Consectetur adipisicing elit. Labore.',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda deserunt eligendi iste molestias necessitatibus nostrum odit quam quod sed voluptatem. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda deserunt eligendi iste molestias necessitatibus nostrum odit quam quod sed voluptatem. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda deserunt eligendi iste molestias necessitatibus nostrum odit quam quod sed voluptatem. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda deserunt eligendi iste molestias necessitatibus nostrum odit quam quod sed voluptatem. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda deserunt eligendi iste molestias necessitatibus nostrum odit quam quod sed voluptatem. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda deserunt eligendi iste molestias necessitatibus nostrum odit quam quod sed voluptatem. ',
-      link: '/offer/1'
-    },
     user: {
       name: 'Ivan',
       photo: 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'
@@ -61,7 +57,12 @@ export default {
     gallery: [
       {}
     ]
-  })
+  }),
+  computed: {
+    item () {
+      return this.$store.getters.offerById(this.id)
+    }
+  }
 }
 </script>
 
@@ -75,6 +76,5 @@ export default {
 }
 .offer-image {
   overflow: hidden;
-  background-color: #eee;
 }
 </style>

@@ -38,6 +38,7 @@ const routes = [
   },
   {
     path: '/offer/:id',
+    props: true,
     name: 'Offer',
     component: Offer
   },

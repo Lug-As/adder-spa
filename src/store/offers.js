@@ -2,6 +2,7 @@ export default {
   state: {
     offers: [
       {
+        id: '1',
         src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
         title: 'Consectetur adipisicing elit. Labore.',
         link: '/offer/1',
@@ -9,6 +10,7 @@ export default {
         promo: true
       },
       {
+        id: '2',
         src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
         title: 'Lorem ipsum ad, nemo.',
         link: '/offer/2',
@@ -16,6 +18,7 @@ export default {
         promo: false
       },
       {
+        id: '3',
         src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
         title: 'Fugit, quae! Lorem ipsum dolor amet.',
         link: '/offer/3',
@@ -23,6 +26,7 @@ export default {
         promo: true
       },
       {
+        id: '4',
         src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
         title: 'Lorem ipsum cum, explicabo.',
         link: '/offer/4',
@@ -40,6 +44,9 @@ export default {
     },
     userOffers (state) {
       return state.offers
+    },
+    offerById (state) {
+      return id => state.offers.find(offer => offer.id === id)
     }
   },
   mutations: {},

@@ -43,6 +43,7 @@
                       <v-btn
                         color="blue"
                         dark
+                        :to="item.link"
                       >
                         Open
                       </v-btn>
