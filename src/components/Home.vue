@@ -15,7 +15,7 @@
             :to="item.link"
           >
             <v-layout fill-height justify-center align-end>
-              <v-btn text class="text-h6 mb-4 offer-title">{{ item.title }}</v-btn>
+              <h3 class="text-center text-md-h6 mb-4 offer-title">{{ item.title }}</h3>
             </v-layout>
           </v-carousel-item>
         </v-carousel>
@@ -28,18 +28,20 @@
       <v-col
         v-for="(item, key) in items"
         :key="key"
-        cols="4"
+        md="4"
+        sm="6"
+        xs="12"
       >
         <v-card>
-          <v-img
-            class="white--text align-end"
-            height="200px"
-            :src="item.src"
-            :to="item.link"
-          ></v-img>
+          <router-link :to="item.link" tag="div" class="pointer">
+            <v-img
+              height="200px"
+              :src="item.src"
+            ></v-img>
+          </router-link>
 
           <v-card-title class="pb-0">
-            {{ item.title }}
+            <router-link :to="item.link" tag="span" class="pointer">{{ item.title }}</router-link>
           </v-card-title>
 
           <v-card-text class="text--primary">
@@ -49,7 +51,7 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text>Open</v-btn>
+            <v-btn text :to="item.link">Open</v-btn>
 
             <v-btn color="blue" dark>Buy</v-btn>
           </v-card-actions>
@@ -92,5 +94,8 @@ export default {
 .offer-title {
   background-color: rgba(0, 0, 0, 0.5);
   padding: 10px 5px 7px;
+}
+.pointer {
+  cursor: pointer;
 }
 </style>
