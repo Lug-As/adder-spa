@@ -43,8 +43,7 @@
           <v-icon left>{{ link.icon }}</v-icon>
           {{ link.title }}
         </v-btn>
-        <v-btn text @click="toggleTheme"
-        >
+        <v-btn text @click="toggleTheme">
           <v-icon>{{ themeIcon }}</v-icon>
         </v-btn>
       </v-toolbar-items>
