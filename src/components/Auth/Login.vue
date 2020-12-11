@@ -24,6 +24,7 @@
                 v-model="password"
                 :error-messages="passwordErrors"
                 @blur="$v.password.$touch()"
+                @keyup.enter="submitLoginForm"
               >
                 <v-icon slot="prepend">mdi-lock</v-icon>
                 <v-btn slot="append"
@@ -69,7 +70,7 @@ export default {
       }
       this.$store.dispatch('loginUser', newUser)
         .then(() => this.$router.push('/'))
-        .catch(e => console.error(e))
+        .catch(() => {})
     },
     togglePasswordVisible () {
       this.passwordVisible = !this.passwordVisible

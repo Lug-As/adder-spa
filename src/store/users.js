@@ -28,7 +28,7 @@ export default {
         commit('setLoading', false)
       } catch (e) {
         commit('setLoading', false)
-        commit('setError', e)
+        commit('setError', e.message)
         throw e
       }
     },
@@ -44,7 +44,7 @@ export default {
         commit('setLoading', false)
       } catch (e) {
         commit('setLoading', false)
-        commit('setError', e)
+        commit('setError', e.message)
         throw e
       }
     }

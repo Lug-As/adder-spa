@@ -102,7 +102,7 @@ export default {
       }
       this.$store.dispatch('createUser', newUser)
         .then(() => this.$router.push('/'))
-        .catch(e => console.error(e))
+        .catch(() => {})
     },
     togglePasswordVisible () {
       this.passwordVisible = !this.passwordVisible

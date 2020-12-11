@@ -54,6 +54,28 @@
         <router-view></router-view>
       </v-container>
     </v-main>
+
+    <template v-if="error">
+      <v-snackbar
+        :timeout="6000"
+        :value="true"
+        multi-line
+        color="error"
+        @input="clearError"
+      >
+        {{ error }}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            dark
+            text
+            v-bind="attrs"
+            @click.native="clearError"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+    </template>
   </v-app>
 </template>
 
@@ -117,6 +139,9 @@ export default {
       const newTheme = !this.$vuetify.theme.dark
       this.$vuetify.theme.dark = newTheme
       localStorage.setItem('themeDark', +newTheme)
+    },
+    clearError () {
+      this.$store.dispatch('setError')
     }
   },
   computed: {
@@ -125,6 +150,9 @@ export default {
         return 'mdi-weather-night'
       }
       return 'mdi-white-balance-sunny'
+    },
+    error () {
+      return this.$store.getters.error
     }
   },
   mounted () {
