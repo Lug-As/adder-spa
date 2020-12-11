@@ -29,7 +29,9 @@
 
     <v-app-bar app :color="mainColor" dark>
       <v-app-bar-nav-icon @click="toggleDrawer" class="hidden-md-and-up"></v-app-bar-nav-icon>
-      <v-toolbar-title>Adder</v-toolbar-title>
+      <v-toolbar-title>
+        <router-link :to="{name: 'Home'}" tag="span" class="pointer">Adder</router-link>
+      </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -42,6 +44,10 @@
         >
           <v-icon left>{{ link.icon }}</v-icon>
           {{ link.title }}
+        </v-btn>
+        <v-btn text @click="logout">
+          <v-icon left>mdi-exit-run</v-icon>
+          Logout
         </v-btn>
         <v-btn text @click="toggleTheme">
           <v-icon>{{ themeIcon }}</v-icon>
@@ -84,51 +90,6 @@ export default {
   name: 'App',
   data: () => ({
     drawer: false,
-    links: [
-      {
-        title: 'Home',
-        icon: 'mdi-home',
-        exact: true,
-        url: {
-          name: 'Home'
-        }
-      },
-      {
-        title: 'Login',
-        icon: 'mdi-login',
-        url: {
-          name: 'Login'
-        }
-      },
-      {
-        title: 'Sign Up',
-        icon: 'mdi-face',
-        url: {
-          name: 'SignUp'
-        }
-      },
-      {
-        title: 'Orders',
-        icon: 'mdi-bookmark',
-        url: {
-          name: 'Orders'
-        }
-      },
-      {
-        title: 'New offer',
-        icon: 'mdi-note-plus',
-        url: {
-          name: 'NewOffer'
-        }
-      },
-      {
-        title: 'My offers',
-        icon: 'mdi-view-list',
-        url: {
-          name: 'OfferList'
-        }
-      }
-    ],
     mainColor: 'blue'
   }),
   methods: {
@@ -142,6 +103,10 @@ export default {
     },
     clearError () {
       this.$store.dispatch('setError')
+    },
+    logout () {
+      this.$store.dispatch('logoutUser')
+      this.$router.push('/')
     }
   },
   computed: {
@@ -153,6 +118,64 @@ export default {
     },
     error () {
       return this.$store.getters.error
+    },
+    authCheck () {
+      return this.$store.getters.authCheck
+    },
+    links () {
+      let links = [
+        {
+          title: 'Home',
+          icon: 'mdi-home',
+          exact: true,
+          url: {
+            name: 'Home'
+          }
+        }
+      ]
+      if (this.authCheck) {
+        links = links.concat([
+          {
+            title: 'Orders',
+            icon: 'mdi-bookmark',
+            url: {
+              name: 'Orders'
+            }
+          },
+          {
+            title: 'New offer',
+            icon: 'mdi-note-plus',
+            url: {
+              name: 'NewOffer'
+            }
+          },
+          {
+            title: 'My offers',
+            icon: 'mdi-view-list',
+            url: {
+              name: 'OfferList'
+            }
+          }
+        ])
+        return links
+      }
+      links = links.concat([
+        {
+          title: 'Login',
+          icon: 'mdi-login',
+          url: {
+            name: 'Login'
+          }
+        },
+        {
+          title: 'Sign Up',
+          icon: 'mdi-face',
+          url: {
+            name: 'SignUp'
+          }
+        }
+      ])
+      return links
     }
   },
   mounted () {
@@ -163,3 +186,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.pointer {
+  cursor: pointer;
+}
+</style>

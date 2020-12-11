@@ -8,11 +8,18 @@ export default {
   getters: {
     user (state) {
       return state.user
+    },
+    authCheck (state) {
+      return state.user !== null
     }
   },
   mutations: {
     setUser (state, payload) {
       state.user = payload
+    },
+    logoutUser (state) {
+      state.user = null
+      firebase.auth().signOut()
     }
   },
   actions: {
@@ -47,6 +54,12 @@ export default {
         commit('setError', e.message)
         throw e
       }
+    },
+    setUser ({ commit }, { uid }) {
+      commit('setUser', { id: uid })
+    },
+    logoutUser ({ commit }) {
+      commit('logoutUser')
     }
   }
 }
