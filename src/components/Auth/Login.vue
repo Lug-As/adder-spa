@@ -40,7 +40,8 @@
             <v-spacer></v-spacer>
             <v-btn color="blue"
                    :dark="!$v.$invalid"
-                   :disabled="$v.$invalid"
+                   :loading="loading"
+                   :disabled="$v.$invalid || loading"
                    @click.prevent="submitLoginForm"
             >Enter
             </v-btn>
@@ -66,13 +67,18 @@ export default {
         email: this.email,
         password: this.password
       }
-      console.log(newUser)
+      this.$store.dispatch('loginUser', newUser)
+        .then(() => this.$router.push('/'))
+        .catch(e => console.error(e))
     },
     togglePasswordVisible () {
       this.passwordVisible = !this.passwordVisible
     }
   },
   computed: {
+    loading () {
+      return this.$store.getters.loading
+    },
     emailErrors () {
       const errors = []
       if (!this.$v.email.$dirty) return errors

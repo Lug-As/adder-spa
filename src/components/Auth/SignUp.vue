@@ -68,7 +68,8 @@
             <v-spacer></v-spacer>
             <v-btn color="blue"
                    :dark="!$v.$invalid"
-                   :disabled="$v.$invalid"
+                   :loading="loading"
+                   :disabled="$v.$invalid || loading"
                    @click.prevent="submitLoginForm"
             >
               Create account
@@ -99,7 +100,9 @@ export default {
         email: this.email,
         password: this.password
       }
-      console.log(newUser)
+      this.$store.dispatch('createUser', newUser)
+        .then(() => this.$router.push('/'))
+        .catch(e => console.error(e))
     },
     togglePasswordVisible () {
       this.passwordVisible = !this.passwordVisible
@@ -109,6 +112,9 @@ export default {
     }
   },
   computed: {
+    loading () {
+      return this.$store.getters.loading
+    },
     nameErrors () {
       const errors = []
       if (!this.$v.name.$dirty) return errors
