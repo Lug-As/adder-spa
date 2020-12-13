@@ -5,15 +5,29 @@
         <v-row>
           <v-col md="9">
             <v-card v-if="item">
-              <div class="offer-image text-center">
-                <silent-box
-                  :image="{src: item.src, thumbnailHeight: 400}"
-                >
-                  <template v-slot:silentbox-item="">
-                    <img class="offer-image" :src="item.src" :alt="item.title">
-                  </template>
-                </silent-box>
-              </div>
+              <v-hover>
+                <template v-slot:default="{ hover }">
+                  <v-card class="offer-image text-center">
+                    <silent-box
+                      :image="{src: item.src, thumbnailHeight: 400}"
+                    >
+                      <template v-slot:silentbox-item="">
+                        <img class="offer-image" :src="item.src" :alt="item.title" style="margin-bottom: -8px;">
+                        <v-fade-transition>
+                          <v-overlay
+                            v-if="hover"
+                            absolute
+                            opacity="0.25"
+                            z-index="0"
+                          >
+                            <v-icon large>mdi-magnify-plus-outline</v-icon>
+                          </v-overlay>
+                        </v-fade-transition>
+                      </template>
+                    </silent-box>
+                  </v-card>
+                </template>
+              </v-hover>
               <div class="card-body">
                 <v-card-title class="text-h4">{{ item.title }}</v-card-title>
                 <v-card-text class="pb-1">
