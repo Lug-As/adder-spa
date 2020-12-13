@@ -14,36 +14,8 @@ class Offer {
 
 export default {
   state: {
-    offers: [
-      {
-        id: '1',
-        src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-        title: 'Consectetur adipisicing elit. Labore.',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda deserunt eligendi iste molestias necessitatibus nostrum odit quam quod sed voluptatem.',
-        promo: true
-      },
-      {
-        id: '2',
-        src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
-        title: 'Lorem ipsum ad, nemo.',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda deserunt eligendi iste molestias necessitatibus nostrum odit quam quod sed voluptatem.',
-        promo: false
-      },
-      {
-        id: '3',
-        src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
-        title: 'Fugit, quae! Lorem ipsum dolor amet.',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda deserunt eligendi iste molestias necessitatibus nostrum odit quam quod sed voluptatem.',
-        promo: true
-      },
-      {
-        id: '4',
-        src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
-        title: 'Lorem ipsum cum, explicabo.',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda deserunt eligendi iste molestias necessitatibus nostrum odit quam quod sed voluptatem.',
-        promo: true
-      }
-    ]
+    offers: [],
+    starterOffersLoading: true
   },
   getters: {
     offers (state) {
@@ -57,11 +29,20 @@ export default {
     },
     offerById (state) {
       return id => state.offers.find(offer => String(offer.id) === String(id))
+    },
+    starterOffersLoading (state) {
+      return state.starterOffersLoading
     }
   },
   mutations: {
     createOffer (state, newOffer) {
       state.offers.push(newOffer)
+    },
+    setOffers (state, offers) {
+      state.offers = offers
+    },
+    stopStarterOfferLoading (state) {
+      state.starterOffersLoading = false
     }
   },
   actions: {
@@ -86,6 +67,28 @@ export default {
         commit('setLoading', false)
       } catch (e) {
         commit('setLoading', false)
+        commit('setError', e.message)
+        throw e
+      }
+    },
+    async loadOffers ({ commit, getters }) {
+      commit('setError')
+      try {
+        const result = await firebase.database().ref('offers').once('value')
+        const value = result.val()
+        const offers = []
+        Object.keys(value).forEach(key => {
+          const offer = value[key]
+          offers.push({
+            ...offer,
+            id: key
+          })
+        })
+        commit('setOffers', offers)
+        commit('stopStarterOfferLoading')
+        console.log(getters.starterOffersLoading)
+      } catch (e) {
+        commit('stopStarterOfferLoading')
         commit('setError', e.message)
         throw e
       }

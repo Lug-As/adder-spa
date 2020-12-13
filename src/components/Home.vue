@@ -4,6 +4,7 @@
       <v-flex>
         <h2 class="text-center text-h4 mb-5">Top Offers</h2>
         <v-carousel
+          v-if="promoOffers.length"
           show-arrows-on-hover
           hide-delimiters
           height="400"
@@ -20,47 +21,75 @@
             </v-layout>
           </v-carousel-item>
         </v-carousel>
+        <template v-else>
+          <div class="text-center" v-if="starterLoading">
+            <v-progress-circular
+              :size="45"
+              class="mt-10"
+              color="primary"
+              indeterminate
+            ></v-progress-circular>
+          </div>
+          <h4 v-else
+              class="text-center text--secondary text-h5 my-12"
+          >No promo offers</h4>
+        </template>
       </v-flex>
     </v-row>
     <v-row>
       <v-col cols="12">
         <h2 class="text-center heading mt-4">All Offers</h2>
       </v-col>
-      <v-col
-        v-for="(item, key) in offers"
-        :key="key"
-        md="4"
-        sm="6"
-        xs="12"
-      >
-        <v-card>
-          <router-link :to="offerLink(item.id)" tag="div" class="pointer">
-            <v-img
-              height="200px"
-              :src="item.src"
-            ></v-img>
-          </router-link>
-
-          <v-card-title class="pb-0">
-            <router-link :to="offerLink(item.id)" tag="span" class="pointer">{{
-                item.title
-              }}
+      <template v-if="offers.length">
+        <v-col
+          v-for="(item, key) in offers"
+          :key="key"
+          md="4"
+          sm="6"
+          xs="12"
+        >
+          <v-card>
+            <router-link :to="offerLink(item.id)" tag="div" class="pointer">
+              <v-img
+                height="200px"
+                :src="item.src"
+              ></v-img>
             </router-link>
-          </v-card-title>
 
-          <v-card-text class="text--primary">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut autem blanditiis cum ducimus illum
-              laudantium necessitatibus perspiciatis quam similique ullam.</p>
-          </v-card-text>
+            <v-card-title class="pb-0">
+              <router-link :to="offerLink(item.id)" tag="span" class="pointer">{{
+                  item.title
+                }}
+              </router-link>
+            </v-card-title>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn text :to="offerLink(item.id)">Open</v-btn>
+            <v-card-text class="text--primary">
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut autem blanditiis cum ducimus illum
+                laudantium necessitatibus perspiciatis quam similique ullam.</p>
+            </v-card-text>
 
-            <v-btn color="blue" dark>Buy</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text :to="offerLink(item.id)">Open</v-btn>
+
+              <v-btn color="blue" dark>Buy</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </template>
+      <template v-else>
+        <v-col cols="12">
+          <div class="text-center" v-if="starterLoading">
+            <v-progress-circular
+              :size="45"
+              class="mt-10"
+              color="primary"
+              indeterminate
+            ></v-progress-circular>
+          </div>
+          <h4 v-else>No offers</h4>
+        </v-col>
+      </template>
     </v-row>
   </v-container>
 </template>
@@ -71,10 +100,13 @@ import { offerLinkMixin } from '@/mixins'
 export default {
   computed: {
     promoOffers () {
-      return this.$store.getters.promoOffers
+      return []
     },
     offers () {
       return this.$store.getters.offers
+    },
+    starterLoading () {
+      return this.$store.getters.starterOffersLoading
     }
   },
   mixins: [offerLinkMixin]

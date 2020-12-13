@@ -59,7 +59,17 @@
           </template>
           <template v-else>
             <v-col xs="12" md="6" offset-md="3">
-              <h5 class="text--secondary text-body-1 text-center mt-6">You don't have any own offer yet.</h5>
+              <div class="text-center" v-if="starterLoading">
+                <v-progress-circular
+                  :size="45"
+                  class="mt-10"
+                  color="primary"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
+              <template v-else>
+                <h5 class="text--secondary text-body-1 text-center mt-6">You don't have any own offer yet.</h5>
+              </template>
             </v-col>
           </template>
         </v-row>
@@ -75,6 +85,9 @@ export default {
   computed: {
     myOffers () {
       return this.$store.getters.userOffers
+    },
+    starterLoading () {
+      return this.$store.getters.starterOffersLoading
     }
   },
   filters: {

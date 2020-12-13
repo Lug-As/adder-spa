@@ -38,6 +38,8 @@ new Vue({
       newIsAuth = String(+newIsAuth)
       localStorage.setItem('isAuth', newIsAuth)
     })
+
+    this.$store.dispatch('loadOffers')
   },
   router,
   store,
