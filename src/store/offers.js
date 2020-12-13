@@ -2,11 +2,11 @@ import firebase from 'firebase/app'
 import 'firebase/database'
 
 class Offer {
-  constructor (title, description, userId, imageSrc = null, promo = false, id = null) {
+  constructor (title, description, userId, src = null, promo = false, id = null) {
     this.title = title
     this.description = description
     this.userId = userId
-    this.imageSrc = imageSrc
+    this.src = src
     this.promo = promo
     this.id = id
   }
@@ -71,13 +71,13 @@ export default {
     }, {
       title,
       description,
-      imageSrc,
+      src,
       promo
     }) {
       commit('setLoading', true)
       commit('setError')
       try {
-        const offer = new Offer(title, description, getters.user.id, imageSrc, promo)
+        const offer = new Offer(title, description, getters.user.id, src, promo)
         const result = await firebase.database().ref('offers').push(offer)
         commit('createOffer', {
           ...offer,

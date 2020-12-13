@@ -94,6 +94,7 @@ export default {
           src: 'https://cdn.getyourguide.com/img/location/5c04f6f20650d.jpeg/148.jpg'
         }
         this.$store.dispatch('createOffer', newOffer)
+          .then(() => this.$router.push({ name: 'OfferList' }))
       }
     }
   },
