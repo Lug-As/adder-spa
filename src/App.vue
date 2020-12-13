@@ -38,8 +38,8 @@
 
     <v-app-bar app :color="mainColor" dark>
       <v-app-bar-nav-icon @click="toggleDrawer" class="hidden-md-and-up"></v-app-bar-nav-icon>
-      <v-toolbar-title>
-        <router-link :to="{name: 'Home'}" tag="span" class="pointer">Adder</router-link>
+      <v-toolbar-title class="ext_area">
+        <router-link :to="{name: 'Home'}" tag="span" class="pointer ext_area home-link">Adder App</router-link>
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -138,6 +138,7 @@ export default {
       return this.$store.getters.error
     },
     authCheck () {
+      console.log('User is', this.$store.getters.authCheck)
       return this.$store.getters.authCheck
     },
     links () {
@@ -208,5 +209,17 @@ export default {
 <style scoped>
 .pointer {
   cursor: pointer;
+}
+
+.ext_area {
+  padding: 16px 32px 16px 0;
+}
+
+.home-link {
+  transition: .3s;
+}
+
+.home-link:hover {
+  color: #f3f3f3;
 }
 </style>

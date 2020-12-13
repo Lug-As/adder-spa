@@ -87,14 +87,13 @@ export default {
   methods: {
     createOffer () {
       if (!this.$v.$invalid) {
-        const offer = {
+        const newOffer = {
           title: this.title,
           description: this.description,
           promo: this.promo,
           src: 'https://cdn.getyourguide.com/img/location/5c04f6f20650d.jpeg/148.jpg'
         }
-        console.log(offer)
-        this.$store.dispatch('createOffer', offer)
+        this.$store.dispatch('createOffer', newOffer)
       }
     }
   },

@@ -17,7 +17,7 @@ new Vue({
   store,
   vuetify,
   render: h => h(App),
-  created () {
+  beforeCreate () {
     firebase.initializeApp({
       apiKey: 'AIzaSyBqmZlNzZZHIiBthf8b_JPI4DNDVylIU8k',
       authDomain: 'adder-app.firebaseapp.com',

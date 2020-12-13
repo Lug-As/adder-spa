@@ -1,3 +1,17 @@
+import firebase from 'firebase/app'
+import 'firebase/database'
+
+class Offer {
+  constructor (title, description, userId, imageSrc = null, promo = false, id = null) {
+    this.title = title
+    this.description = description
+    this.userId = userId
+    this.imageSrc = imageSrc
+    this.promo = promo
+    this.id = id
+  }
+}
+
 export default {
   state: {
     offers: [
@@ -51,9 +65,30 @@ export default {
     }
   },
   actions: {
-    createOffer ({ commit }, newOffer) {
-      newOffer.id = '9999'
-      commit('createOffer', newOffer)
+    async createOffer ({
+      commit,
+      getters
+    }, {
+      title,
+      description,
+      imageSrc,
+      promo
+    }) {
+      commit('setLoading', true)
+      commit('setError')
+      try {
+        const offer = new Offer(title, description, getters.user.id, imageSrc, promo)
+        const result = await firebase.database().ref('offers').push(offer)
+        commit('createOffer', {
+          ...offer,
+          id: result.key
+        })
+        commit('setLoading', false)
+      } catch (e) {
+        commit('setLoading', false)
+        commit('setError', e.message)
+        throw e
+      }
     }
   }
 }
