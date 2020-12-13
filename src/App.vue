@@ -138,7 +138,6 @@ export default {
       return this.$store.getters.error
     },
     authCheck () {
-      console.log('User is', this.$store.getters.authCheck)
       return this.$store.getters.authCheck
     },
     links () {

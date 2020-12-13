@@ -3,17 +3,18 @@ import 'firebase/auth'
 
 export default {
   state: {
-    user: null
+    user: null,
+    isAuth: false
   },
   getters: {
     user (state) {
       return state.user
     },
     authCheck (state) {
-      return state.user !== null
+      return state.isAuth
     },
     guestCheck (state) {
-      return state.user === null
+      return !state.isAuth
     }
   },
   mutations: {
@@ -23,6 +24,9 @@ export default {
     logoutUser (state) {
       state.user = null
       firebase.auth().signOut()
+    },
+    setAuthenticated (state, payload) {
+      state.isAuth = payload
     }
   },
   actions: {
@@ -63,6 +67,9 @@ export default {
     },
     logoutUser ({ commit }) {
       commit('logoutUser')
+    },
+    setUserAuthenticated () {
+
     }
   }
 }
