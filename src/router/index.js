@@ -7,6 +7,7 @@ import NewOffer from '@/components/Offers/NewOffer'
 import Offer from '@/components/Offers/Offer'
 import OfferList from '@/components/Offers/OfferList'
 import Orders from '@/components/User/Orders'
+import { auth, guest } from './authGuard'
 
 Vue.use(VueRouter)
 
@@ -17,35 +18,40 @@ const routes = [
     component: Home
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: Login
-  },
-  {
-    path: '/signup',
-    name: 'SignUp',
-    component: SignUp
-  },
-  {
-    path: '/orders',
-    name: 'Orders',
-    component: Orders
-  },
-  {
-    path: '/new',
-    name: 'NewOffer',
-    component: NewOffer
-  },
-  {
     path: '/offer/:id',
     props: true,
     name: 'Offer',
     component: Offer
   },
   {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+    beforeEnter: guest
+  },
+  {
+    path: '/signup',
+    name: 'SignUp',
+    component: SignUp,
+    beforeEnter: guest
+  },
+  {
+    path: '/orders',
+    name: 'Orders',
+    component: Orders,
+    beforeEnter: auth
+  },
+  {
+    path: '/new',
+    name: 'NewOffer',
+    component: NewOffer,
+    beforeEnter: auth
+  },
+  {
     path: '/list',
     name: 'OfferList',
-    component: OfferList
+    component: OfferList,
+    beforeEnter: auth
   }
 ]
 

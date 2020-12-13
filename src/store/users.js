@@ -11,6 +11,9 @@ export default {
     },
     authCheck (state) {
       return state.user !== null
+    },
+    guestCheck (state) {
+      return state.user === null
     }
   },
   mutations: {

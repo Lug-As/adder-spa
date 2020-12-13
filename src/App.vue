@@ -24,6 +24,15 @@
             <v-list-item-title>{{ link.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item link v-if="authCheck" @click="logout">
+          <v-list-item-icon>
+            <v-icon>mdi-exit-run</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
@@ -45,7 +54,7 @@
           <v-icon left>{{ link.icon }}</v-icon>
           {{ link.title }}
         </v-btn>
-        <v-btn text @click="logout">
+        <v-btn v-if="authCheck" text @click="logout">
           <v-icon left>mdi-exit-run</v-icon>
           Logout
         </v-btn>
@@ -93,8 +102,12 @@ export default {
     mainColor: 'blue'
   }),
   methods: {
-    toggleDrawer () {
-      this.drawer = !this.drawer
+    toggleDrawer (forceState = null) {
+      if (forceState === null) {
+        this.drawer = !this.drawer
+        return
+      }
+      this.drawer = forceState
     },
     toggleTheme () {
       const newTheme = !this.$vuetify.theme.dark
@@ -106,7 +119,12 @@ export default {
     },
     logout () {
       this.$store.dispatch('logoutUser')
-      this.$router.push('/')
+      const redirectTo = 'Home'
+      if (this.$route.name !== redirectTo) {
+        this.$router.push({ name: redirectTo })
+      } else {
+        this.toggleDrawer(false)
+      }
     }
   },
   computed: {
