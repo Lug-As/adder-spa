@@ -39,6 +39,7 @@
                 <v-btn
                   color="green"
                   dark
+                  @click="triggerUpload"
                 >
                   Upload
                   <v-icon
@@ -48,12 +49,19 @@
                     mdi-cloud-upload
                   </v-icon>
                 </v-btn>
+                <input
+                  ref="fileInput"
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  @change="loadImage"
+                >
               </v-row>
-              <v-row class="mt-3 mb-5">
+              <v-row class="mt-3 mb-5" v-if="imageSrc">
                 <v-img
                   max-height="200"
                   max-width="200"
-                  src=""></v-img>
+                  :src="imageSrc"></v-img>
               </v-row>
 
               <v-row>
@@ -82,7 +90,9 @@ export default {
   data: () => ({
     title: '',
     description: '',
-    promo: false
+    promo: false,
+    image: null,
+    imageSrc: ''
   }),
   methods: {
     createOffer () {
@@ -91,11 +101,21 @@ export default {
           title: this.title,
           description: this.description,
           promo: this.promo,
-          src: 'https://cdn.getyourguide.com/img/location/5c04f6f20650d.jpeg/148.jpg'
+          image: this.image
         }
         this.$store.dispatch('createOffer', newOffer)
           .then(() => this.$router.push({ name: 'OfferList' }))
       }
+    },
+    triggerUpload () {
+      this.$refs.fileInput.click()
+    },
+    loadImage (event) {
+      const file = event.target.files[0]
+      const reader = new FileReader()
+      reader.onload = ev => (this.imageSrc = reader.result)
+      reader.readAsDataURL(file)
+      this.image = file
     }
   },
   computed: {

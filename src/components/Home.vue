@@ -100,7 +100,7 @@ import { offerLinkMixin } from '@/mixins'
 export default {
   computed: {
     promoOffers () {
-      return []
+      return this.$store.getters.promoOffers
     },
     offers () {
       return this.$store.getters.offers

@@ -1,8 +1,9 @@
 import firebase from 'firebase/app'
 import 'firebase/database'
+import 'firebase/storage'
 
 class Offer {
-  constructor (title, description, userId, src = null, promo = false, id = null) {
+  constructor (title, description, userId, promo = false, src = null, id = null) {
     this.title = title
     this.description = description
     this.userId = userId
@@ -52,17 +53,31 @@ export default {
     }, {
       title,
       description,
-      src,
+      image,
       promo
     }) {
       commit('setLoading', true)
       commit('setError')
       try {
-        const offer = new Offer(title, description, getters.user.id, src, promo)
+        const offer = new Offer(title, description, getters.user.id, promo)
         const result = await firebase.database().ref('offers').push(offer)
+        const id = result.key
+
+        const imageExt = image.name.slice(image.name.lastIndexOf('.'))
+        const metadata = {
+          contentType: 'image/*'
+        }
+        const uploadTask = await firebase.storage().ref().child('offers/' + result.key + imageExt).put(image, metadata)
+        const src = await uploadTask.ref.getDownloadURL()
+
+        await firebase.database().ref('offers').child(id).update({
+          src
+        })
+
         commit('createOffer', {
           ...offer,
-          id: result.key
+          id,
+          src
         })
         commit('setLoading', false)
       } catch (e) {
@@ -71,7 +86,7 @@ export default {
         throw e
       }
     },
-    async loadOffers ({ commit, getters }) {
+    async loadOffers ({ commit }) {
       commit('setError')
       try {
         const result = await firebase.database().ref('offers').once('value')
@@ -86,7 +101,6 @@ export default {
         })
         commit('setOffers', offers)
         commit('stopStarterOfferLoading')
-        console.log(getters.starterOffersLoading)
       } catch (e) {
         commit('stopStarterOfferLoading')
         commit('setError', e.message)

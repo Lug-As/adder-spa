@@ -67,9 +67,6 @@ export default {
     },
     logoutUser ({ commit }) {
       commit('logoutUser')
-    },
-    setUserAuthenticated () {
-
     }
   }
 }
