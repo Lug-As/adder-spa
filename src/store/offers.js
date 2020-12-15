@@ -25,8 +25,8 @@ export default {
     promoOffers (state) {
       return state.offers.filter(offer => offer.promo)
     },
-    userOffers (state) {
-      return state.offers
+    userOffers (state, getters) {
+      return state.offers.filter(offer => offer.userId === getters.user.id)
     },
     offerById (state) {
       return id => state.offers.find(offer => String(offer.id) === String(id))

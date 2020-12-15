@@ -67,6 +67,9 @@ export default {
     },
     logoutUser ({ commit }) {
       commit('logoutUser')
+    },
+    setAuthenticated ({ commit }, payload) {
+      commit('setAuthenticated', payload)
     }
   }
 }

@@ -27,7 +27,7 @@ new Vue({
     if (!isAuth) {
       isAuth = false
     }
-    this.$store.commit('setAuthenticated', isAuth)
+    this.$store.dispatch('setAuthenticated', isAuth)
 
     firebase.auth().onAuthStateChanged(user => {
       let newIsAuth = false
@@ -35,6 +35,7 @@ new Vue({
         newIsAuth = true
         this.$store.dispatch('setUser', user)
       }
+      this.$store.dispatch('setAuthenticated', newIsAuth)
       newIsAuth = String(+newIsAuth)
       localStorage.setItem('isAuth', newIsAuth)
     })
