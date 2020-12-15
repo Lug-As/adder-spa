@@ -2,9 +2,9 @@
   <v-container fluid fill-height>
     <v-layout>
       <v-flex>
-        <v-row>
+        <v-row v-if="item">
           <v-col md="9">
-            <v-card v-if="item">
+            <v-card>
               <v-hover>
                 <template v-slot:default="{ hover }">
                   <v-card class="offer-image text-center">
@@ -35,8 +35,11 @@
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
+                  <app-edit-offer-modal
+                    :offer="item"
+                  ></app-edit-offer-modal>
                   <v-btn
-                    color="blue"
+                    color="primary"
                     dark
                     large
                   >Buy
@@ -44,7 +47,6 @@
                 </v-card-actions>
               </div>
             </v-card>
-            <h2 v-else class="text-center text-h2 error--text">404 Not Found</h2>
           </v-col>
           <v-col md="3">
             <v-card v-if="item" class="text-center">
@@ -59,26 +61,48 @@
             </v-card>
           </v-col>
         </v-row>
+        <v-row v-else>
+          <v-col cols="12">
+            <div class="text-center" v-if="starterLoading">
+              <v-progress-circular
+                :size="75"
+                class="mt-12"
+                color="primary"
+                indeterminate
+              ></v-progress-circular>
+            </div>
+            <h2 v-else class="text-center text-h2 error--text">404 Not Found</h2>
+          </v-col>
+        </v-row>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
+import EditOfferModal from '@/components/Offers/EditOfferModal'
+
 export default {
-  props: ['id'],
+  components: {
+    appEditOfferModal: EditOfferModal
+  },
+  props: {
+    id: {
+      required: true
+    }
+  },
   data: () => ({
     user: {
       name: 'Ivan',
       photo: 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'
-    },
-    gallery: [
-      {}
-    ]
+    }
   }),
   computed: {
     item () {
       return this.$store.getters.offerById(this.id)
+    },
+    starterLoading () {
+      return this.$store.getters.starterOffersLoading
     }
   }
 }

@@ -44,12 +44,28 @@ export default {
     },
     stopStarterOfferLoading (state) {
       state.starterOffersLoading = false
+    },
+    updateOffer (state, newOffer) {
+      const key = state.offers.findIndex(item => item.id === newOffer.id)
+      state.offers[key] = newOffer
     }
   },
   actions: {
+    async loadImage (context, {
+      image,
+      offerId
+    }) {
+      const imageExt = image.name.slice(image.name.lastIndexOf('.'))
+      const metadata = {
+        contentType: 'image/*'
+      }
+      const uploadTask = await firebase.storage().ref().child('offers/' + offerId + imageExt).put(image, metadata)
+      return await uploadTask.ref.getDownloadURL()
+    },
     async createOffer ({
       commit,
-      getters
+      getters,
+      dispatch
     }, {
       title,
       description,
@@ -63,12 +79,10 @@ export default {
         const result = await firebase.database().ref('offers').push(offer)
         const id = result.key
 
-        const imageExt = image.name.slice(image.name.lastIndexOf('.'))
-        const metadata = {
-          contentType: 'image/*'
-        }
-        const uploadTask = await firebase.storage().ref().child('offers/' + result.key + imageExt).put(image, metadata)
-        const src = await uploadTask.ref.getDownloadURL()
+        const src = await dispatch('loadImage', {
+          image,
+          offerId: id
+        })
 
         await firebase.database().ref('offers').child(id).update({
           src
@@ -103,6 +117,59 @@ export default {
         commit('stopStarterOfferLoading')
       } catch (e) {
         commit('stopStarterOfferLoading')
+        commit('setError', e.message)
+        throw e
+      }
+    },
+    async updateOffer ({
+      commit,
+      getters,
+      dispatch
+    }, {
+      id,
+      title,
+      description,
+      image,
+      promo
+    }) {
+      function getDiff (oldOffer, newOffer) {
+        const keys = Object.keys(oldOffer)
+        const difference = {}
+        keys.forEach(key => {
+          const oldField = oldOffer[key]
+          const newField = newOffer[key]
+          if (newField !== oldField) {
+            difference[key] = newField
+          }
+        })
+        return difference
+      }
+
+      commit('setLoading', true)
+      commit('setError')
+      try {
+        const oldOfferFields = getters.offerById(id)
+        const oldOffer = new Offer(oldOfferFields.title, oldOfferFields.description, oldOfferFields.userId, oldOfferFields.promo, oldOfferFields.src, oldOfferFields.id)
+        let src
+        if (image) {
+          src = await dispatch('loadImage', {
+            image,
+            offerId: id
+          })
+        } else {
+          src = oldOffer.src
+        }
+
+        const newOffer = new Offer(title, description, getters.user.id, promo, src, id)
+        const diff = getDiff(oldOffer, newOffer)
+        if (diff) {
+          await firebase.database().ref('offers').child(id).update(diff)
+        }
+
+        commit('updateOffer', newOffer)
+        commit('setLoading', false)
+      } catch (e) {
+        commit('setLoading', false)
         commit('setError', e.message)
         throw e
       }
