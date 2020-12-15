@@ -106,8 +106,11 @@ export default {
     starterLoading () {
       return this.$store.getters.starterOffersLoading
     },
+    isAuth () {
+      return this.$store.getters.authCheck
+    },
     isOwner () {
-      return this.$store.getters.user.id === this.offer.userId
+      return this.isAuth && this.$store.getters.user.id === this.offer.userId
     }
   }
 }

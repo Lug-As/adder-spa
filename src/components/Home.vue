@@ -72,7 +72,10 @@
               <v-spacer></v-spacer>
               <v-btn text :to="offerLink(item.id)">Open</v-btn>
 
-              <v-btn color="blue" dark>Buy</v-btn>
+<!--              <v-btn color="blue" dark>Buy</v-btn>-->
+              <app-order-modal
+                :offer="item"
+              ></app-order-modal>
             </v-card-actions>
           </v-card>
         </v-col>

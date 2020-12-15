@@ -31,6 +31,7 @@ export default {
   },
   actions: {
     async createUser ({ commit }, {
+      name,
       email,
       password
     }) {
@@ -38,6 +39,9 @@ export default {
       commit('setError')
       try {
         const user = await firebase.auth().createUserWithEmailAndPassword(email, password)
+        user.user.updateProfile({
+          displayName: name
+        })
         commit('setUser', { id: user.uid })
         commit('setLoading', false)
       } catch (e) {
@@ -63,6 +67,7 @@ export default {
       }
     },
     setUser ({ commit }, { uid }) {
+      console.log(uid)
       commit('setUser', { id: uid })
     },
     logoutUser ({ commit }) {

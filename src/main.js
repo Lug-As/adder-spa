@@ -7,9 +7,11 @@ import Vuelidate from 'vuelidate'
 import VueSilentbox from 'vue-silentbox'
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import OrderModal from '@/views/OrderModal'
 
 Vue.use(VueSilentbox)
 Vue.use(Vuelidate)
+Vue.component('app-order-modal', OrderModal)
 Vue.config.productionTip = false
 
 new Vue({
