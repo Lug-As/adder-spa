@@ -2,17 +2,17 @@
   <v-container fluid fill-height>
     <v-layout>
       <v-flex>
-        <v-row v-if="item">
+        <v-row v-if="offer">
           <v-col md="9">
             <v-card>
               <v-hover>
                 <template v-slot:default="{ hover }">
                   <v-card class="offer-image text-center">
                     <silent-box
-                      :image="{src: item.src, thumbnailHeight: 400}"
+                      :image="{src: offer.src, thumbnailHeight: 400}"
                     >
                       <template v-slot:silentbox-item="">
-                        <img class="offer-image" :src="item.src" :alt="item.title" style="margin-bottom: -8px;">
+                        <img class="offer-image" :src="offer.src" :alt="offer.title" style="margin-bottom: -8px;">
                         <v-fade-transition>
                           <v-overlay
                             v-if="hover"
@@ -29,16 +29,18 @@
                 </template>
               </v-hover>
               <div class="card-body">
-                <v-card-title class="text-h4">{{ item.title }}</v-card-title>
+                <v-card-title class="text-h4">{{ offer.title }}</v-card-title>
                 <v-card-text class="pb-1">
-                  <p class="mb-0">{{ item.description }}</p>
+                  <p class="mb-0">{{ offer.description }}</p>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <app-edit-offer-modal
-                    :offer="item"
+                    v-if="isOwner"
+                    :offer="offer"
                   ></app-edit-offer-modal>
                   <v-btn
+                    v-else
                     color="primary"
                     dark
                     large
@@ -49,7 +51,7 @@
             </v-card>
           </v-col>
           <v-col md="3">
-            <v-card v-if="item" class="text-center">
+            <v-card v-if="offer" class="text-center">
               <v-card-subtitle class="text-h6 text--secondary">Seller</v-card-subtitle>
               <v-avatar size="200" class="avatar">
                 <v-img :src="user.photo"></v-img>
@@ -98,11 +100,14 @@ export default {
     }
   }),
   computed: {
-    item () {
+    offer () {
       return this.$store.getters.offerById(this.id)
     },
     starterLoading () {
       return this.$store.getters.starterOffersLoading
+    },
+    isOwner () {
+      return this.$store.getters.user.id === this.offer.userId
     }
   }
 }
