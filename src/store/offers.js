@@ -46,8 +46,8 @@ export default {
       state.starterOffersLoading = false
     },
     updateOffer (state, newOffer) {
-      const key = state.offers.findIndex(item => item.id === newOffer.id)
-      state.offers[key] = newOffer
+      const offer = state.offers.find(item => item.id === newOffer.id)
+      Object.assign(offer, newOffer)
     }
   },
   actions: {
