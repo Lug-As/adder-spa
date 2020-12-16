@@ -2,13 +2,13 @@
   <v-container fluid fill-height>
     <v-layout row>
       <v-flex xs12 md6 offset-md3>
+        <v-subheader class="text-h6">Orders</v-subheader>
         <v-list
+          v-if="orders.length"
           subheader
           two-line
           flat
         >
-          <v-subheader class="text-h6">Orders</v-subheader>
-
           <v-list-item-group
             multiple
           >
@@ -34,7 +34,24 @@
             </v-list-item>
           </v-list-item-group>
         </v-list>
-
+        <v-row v-else>
+          <v-col cols="12">
+            <div class="text-center" v-if="starterLoading">
+                <v-progress-circular
+                  :size="45"
+                  class="mt-10"
+                  color="primary"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
+            <h3
+              v-else
+              class="body-1 text--secondary text-center mt-8"
+            >
+              You have no orders yet
+            </h3>
+          </v-col>
+        </v-row>
       </v-flex>
     </v-layout>
   </v-container>
@@ -42,38 +59,18 @@
 
 <script>
 export default {
-  data: () => ({
-    orders: [
-      {
-        id: 1,
-        name: 'Vlad',
-        phone: '+380994622584',
-        viewed: false
-      },
-      {
-        id: 2,
-        name: 'Ivan',
-        phone: '+380694652784',
-        viewed: false
-      },
-      {
-        id: 3,
-        name: 'Kirill',
-        phone: '+380594342584',
-        viewed: false
-      },
-      {
-        id: 4,
-        name: 'Kostya',
-        phone: '+380544828924',
-        viewed: false
-      }
-    ]
-  }),
   methods: {
     markDone (order) {
       order.viewed = true
       // this.orders = this.orders.filter(item => item.id !== order.id)
+    }
+  },
+  computed: {
+    orders () {
+      return this.$store.getters.orders
+    },
+    starterLoading () {
+      return this.$store.getters.starterOffersLoading
     }
   }
 }

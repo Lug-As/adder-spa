@@ -39,13 +39,10 @@
                     v-if="isOwner"
                     :offer="offer"
                   ></app-edit-offer-modal>
-                  <v-btn
-                    v-else
-                    color="primary"
-                    dark
-                    large
-                  >Buy
-                  </v-btn>
+                  <app-order-modal
+                    :offer="offer"
+                    :large="true"
+                  ></app-order-modal>
                 </v-card-actions>
               </div>
             </v-card>

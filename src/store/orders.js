@@ -9,8 +9,7 @@ export default {
   },
   mutations: {
     createOrder (state, payload) {
-      // state.orders.push(payload)
-      console.log(payload)
+      state.orders.push(payload)
     }
   },
   actions: {

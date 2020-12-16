@@ -8,6 +8,7 @@
       <v-btn
         color="primary"
         dark
+        :large="large"
         v-on="on"
         slot="activator"
       >
@@ -76,7 +77,7 @@ export default {
     return {
       phone: '',
       name: '',
-      publicPhone: '+38',
+      publicPhone: '+38 (0',
       dialog: false,
       phoneMask: '+38 (0##)-##-##-###'
     }
@@ -85,6 +86,11 @@ export default {
     offer: {
       type: Object,
       required: true
+    },
+    large: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   computed: {
@@ -117,12 +123,13 @@ export default {
       this.$v.$touch()
       if (!this.$v.$invalid) {
         const newOrder = {
-          phone: this.phone
+          phone: this.phone,
+          offerId: this.offer.id
         }
         if (this.isGuest) {
           newOrder.name = this.name
         } else {
-          newOrder.userId = this.$store.getters.user.id
+          newOrder.userId = this.$store.getters.id
         }
         this.$store.dispatch('createOrder', newOrder)
         this.closeModal()
@@ -131,6 +138,7 @@ export default {
     closeModal () {
       this.dialog = false
       this.phone = ''
+      this.publicPhone = '+38 (0'
       this.name = ''
       this.$v.$reset()
     }

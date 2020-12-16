@@ -10,6 +10,9 @@ export default {
     user (state) {
       return state.user
     },
+    id (state) {
+      return state.user.id
+    },
     authCheck (state) {
       return state.isAuth
     },
@@ -57,8 +60,7 @@ export default {
       commit('setLoading', true)
       commit('setError')
       try {
-        const user = await firebase.auth().signInWithEmailAndPassword(email, password)
-        commit('setUser', { id: user.uid })
+        await firebase.auth().signInWithEmailAndPassword(email, password)
         commit('setLoading', false)
       } catch (e) {
         commit('setLoading', false)
@@ -67,7 +69,6 @@ export default {
       }
     },
     setUser ({ commit }, { uid }) {
-      console.log(uid)
       commit('setUser', { id: uid })
     },
     logoutUser ({ commit }) {
