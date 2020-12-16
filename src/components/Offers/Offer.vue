@@ -40,6 +40,7 @@
                     :offer="offer"
                   ></app-edit-offer-modal>
                   <app-order-modal
+                    v-else
                     :offer="offer"
                     :large="true"
                   ></app-order-modal>

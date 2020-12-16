@@ -72,8 +72,8 @@
               <v-spacer></v-spacer>
               <v-btn text :to="offerLink(item.id)">Open</v-btn>
 
-<!--              <v-btn color="blue" dark>Buy</v-btn>-->
               <app-order-modal
+                v-if="userId !== item.userId"
                 :offer="item"
               ></app-order-modal>
             </v-card-actions>
@@ -110,6 +110,12 @@ export default {
     },
     starterLoading () {
       return this.$store.getters.starterOffersLoading
+    },
+    isAuth () {
+      return this.$store.getters.authCheck
+    },
+    userId () {
+      return this.$store.getters.id
     }
   },
   mixins: [offerLinkMixin]

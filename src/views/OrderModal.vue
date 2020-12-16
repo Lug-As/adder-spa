@@ -128,8 +128,6 @@ export default {
         }
         if (this.isGuest) {
           newOrder.name = this.name
-        } else {
-          newOrder.userId = this.$store.getters.id
         }
         this.$store.dispatch('createOrder', newOrder)
         this.closeModal()
