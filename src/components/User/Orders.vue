@@ -20,7 +20,7 @@
               <template>
                 <v-list-item-action>
                   <v-checkbox
-                    :input-value="order.viewed"
+                    :input-value="order.done"
                     color="primary"
                   ></v-checkbox>
                 </v-list-item-action>
@@ -61,8 +61,7 @@
 export default {
   methods: {
     markDone (order) {
-      order.done = true
-      // this.orders = this.orders.filter(item => item.id !== order.id)
+      this.$store.dispatch('markDone', order.id)
     }
   },
   computed: {
@@ -74,6 +73,14 @@ export default {
     },
     loading () {
       return this.$store.getters.loading
+    },
+    isAuth () {
+      return this.$store.getters.authCheck
+    }
+  },
+  created () {
+    if (this.isAuth) {
+      this.$store.dispatch('loadOrders')
     }
   }
 }

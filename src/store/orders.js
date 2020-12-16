@@ -18,7 +18,7 @@ export default {
     orders: []
   },
   getters: {
-    orders (state, getters) {
+    orders (s, getters) {
       return getters.undoneOrders.concat(getters.doneOrders)
     },
     doneOrders (s, getters) {
@@ -42,6 +42,10 @@ export default {
     },
     setOrders (state, payload) {
       state.orders = payload
+    },
+    markDone (state, id) {
+      const order = state.orders.find(order => order.id === id)
+      order.done = true
     }
   },
   actions: {
@@ -78,11 +82,11 @@ export default {
       commit,
       getters
     }) {
+      if (!getters.userCheck) return
       commit('setError')
       commit('setLoading', true)
       try {
-        const userId = getters.id
-        const result = await firebase.database().ref('orders/' + userId).once('value')
+        const result = await firebase.database().ref('orders/' + getters.id).once('value')
         const value = result.val()
         const orders = []
         Object.keys(value).forEach(key => {
@@ -93,6 +97,25 @@ export default {
           })
         })
         commit('setOrders', orders)
+        commit('setLoading', false)
+      } catch (e) {
+        commit('setLoading', false)
+        commit('setError', e.message)
+        throw e
+      }
+    },
+    async markDone ({
+      commit,
+      getters
+    }, orderId) {
+      if (!getters.userCheck) return
+      commit('setError')
+      commit('setLoading', true)
+      try {
+        await firebase.database().ref('orders/' + getters.id).child(orderId).update({
+          done: true
+        })
+        commit('markDone', orderId)
         commit('setLoading', false)
       } catch (e) {
         commit('setLoading', false)

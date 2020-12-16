@@ -11,10 +11,13 @@ export default {
       return state.user
     },
     id (state, getters) {
-      if (getters.authCheck) {
+      if (getters.userCheck) {
         return state.user.id
       }
       return null
+    },
+    userCheck (state) {
+      return state.isAuth && state.user !== null
     },
     authCheck (state) {
       return state.isAuth
