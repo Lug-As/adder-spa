@@ -2,9 +2,11 @@ import firebase from 'firebase/app'
 import 'firebase/database'
 
 class Order {
-  constructor (phone, offerId, name = null, userId = null, done = false) {
+  constructor (phone, offerId, name = null, userId = null, done = false, id = null) {
     this.phone = phone
     this.offerId = offerId
+    this.done = done
+    this.id = id
     if (userId) {
       this.userId = userId
     } else if (name) {
@@ -22,12 +24,12 @@ export default {
       return getters.undoneOrders.concat(getters.doneOrders)
     },
     doneOrders (s, getters) {
-      return getters.rawOrders.filter(order => order.done)
+      return getters.formattedOrders.filter(order => order.done)
     },
     undoneOrders (s, getters) {
-      return getters.rawOrders.filter(order => !order.done)
+      return getters.formattedOrders.filter(order => !order.done)
     },
-    rawOrders (state) {
+    formattedOrders (state) {
       return state.orders.map(order => {
         const number = order.phone
         const pattern = new RegExp(`(^\\d{${number.length % 10}})(\\d{3})(\\d{2})(\\d{2})(\\d{3}$)`)
@@ -44,8 +46,12 @@ export default {
       state.orders = payload
     },
     markDone (state, id) {
-      const order = state.orders.find(order => order.id === id)
-      order.done = true
+      state.orders = state.orders.map(order => {
+        if (order.id === id) {
+          order.done = true
+        }
+        return order
+      })
     }
   },
   actions: {
@@ -90,11 +96,9 @@ export default {
         const value = result.val()
         const orders = []
         Object.keys(value).forEach(key => {
-          const order = value[key]
-          orders.push({
-            ...order,
-            id: key
-          })
+          const item = value[key]
+          const order = new Order(item.phone, item.offerId, item.name, item.userId, item.done, key)
+          orders.push(order)
         })
         commit('setOrders', orders)
         commit('setLoading', false)

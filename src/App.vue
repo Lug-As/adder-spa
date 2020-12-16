@@ -124,6 +124,7 @@ export default {
         this.$router.push({ name: redirectTo })
       } else {
         this.toggleDrawer(false)
+        this.$forceUpdate()
       }
     }
   },

@@ -5,45 +5,43 @@
         <v-subheader class="text-h6">Orders</v-subheader>
         <v-list
           v-if="orders.length"
-          subheader
           two-line
-          flat
         >
-          <v-list-item-group
-            multiple
+          <v-list-item
+            v-for="(order, index) of orders"
+            :key="index"
           >
-            <v-list-item
-              v-for="(order, index) of orders"
-              :key="index"
-              @click="markDone(order)"
-            >
-              <template>
-                <v-list-item-action>
-                  <v-checkbox
-                    :input-value="order.done"
-                    color="primary"
-                  ></v-checkbox>
-                </v-list-item-action>
-
-                <v-list-item-content>
-                  <v-list-item-title>{{ order.name }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ order.phone }}</v-list-item-subtitle>
-                </v-list-item-content>
-                <v-btn color="blue" dark @click.prevent.stop="">Open ad</v-btn>
-              </template>
-            </v-list-item>
-          </v-list-item-group>
+            <template>
+              <v-list-item-action>
+                <v-checkbox
+                  color="primary"
+                  :input-value="order.done"
+                  @click="markDone(order.id)"
+                ></v-checkbox>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>{{ order.name }}</v-list-item-title>
+                <v-list-item-subtitle>{{ order.phone }}</v-list-item-subtitle>
+              </v-list-item-content>
+              <v-btn
+                dark
+                color="primary"
+                :to="offerLink(order.offerId)"
+              >Open ad
+              </v-btn>
+            </template>
+          </v-list-item>
         </v-list>
         <v-row v-else>
           <v-col cols="12">
             <div class="text-center" v-if="starterLoading || loading">
-                <v-progress-circular
-                  :size="45"
-                  class="mt-10"
-                  color="primary"
-                  indeterminate
-                ></v-progress-circular>
-              </div>
+              <v-progress-circular
+                :size="45"
+                class="mt-10"
+                color="primary"
+                indeterminate
+              ></v-progress-circular>
+            </div>
             <h3
               v-else
               class="body-1 text--secondary text-center mt-8"
@@ -58,10 +56,12 @@
 </template>
 
 <script>
+import { offerLinkMixin } from '@/mixins'
+
 export default {
   methods: {
-    markDone (order) {
-      this.$store.dispatch('markDone', order.id)
+    markDone (orderId) {
+      this.$store.dispatch('markDone', orderId)
     }
   },
   computed: {
@@ -73,16 +73,12 @@ export default {
     },
     loading () {
       return this.$store.getters.loading
-    },
-    isAuth () {
-      return this.$store.getters.authCheck
     }
   },
   created () {
-    if (this.isAuth) {
-      this.$store.dispatch('loadOrders')
-    }
-  }
+    this.$store.dispatch('loadOrders')
+  },
+  mixins: [offerLinkMixin]
 }
 </script>
 
