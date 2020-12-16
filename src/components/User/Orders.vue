@@ -36,7 +36,7 @@
         </v-list>
         <v-row v-else>
           <v-col cols="12">
-            <div class="text-center" v-if="starterLoading">
+            <div class="text-center" v-if="starterLoading || loading">
                 <v-progress-circular
                   :size="45"
                   class="mt-10"
@@ -61,7 +61,7 @@
 export default {
   methods: {
     markDone (order) {
-      order.viewed = true
+      order.done = true
       // this.orders = this.orders.filter(item => item.id !== order.id)
     }
   },
@@ -71,6 +71,9 @@ export default {
     },
     starterLoading () {
       return this.$store.getters.starterOffersLoading
+    },
+    loading () {
+      return this.$store.getters.loading
     }
   }
 }

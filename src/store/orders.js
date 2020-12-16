@@ -21,11 +21,19 @@ export default {
     orders (state, getters) {
       return getters.undoneOrders.concat(getters.doneOrders)
     },
-    doneOrders (state) {
-      return state.orders.filter(order => order.done)
+    doneOrders (s, getters) {
+      return getters.rawOrders.filter(order => order.done)
     },
-    undoneOrders (state) {
-      return state.orders.filter(order => !order.done)
+    undoneOrders (s, getters) {
+      return getters.rawOrders.filter(order => !order.done)
+    },
+    rawOrders (state) {
+      return state.orders.map(order => {
+        const number = order.phone
+        const pattern = new RegExp(`(^\\d{${number.length % 10}})(\\d{3})(\\d{2})(\\d{2})(\\d{3}$)`)
+        order.phone = number.replace(pattern, '+$1 ($2) $3-$4-$5')
+        return order
+      })
     }
   },
   mutations: {

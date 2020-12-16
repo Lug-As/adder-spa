@@ -36,6 +36,9 @@ new Vue({
       if (user) {
         newIsAuth = true
         this.$store.dispatch('setUser', user)
+          .then(() => {
+            this.$store.dispatch('loadOrders')
+          })
       }
       this.$store.dispatch('setAuthenticated', newIsAuth)
       newIsAuth = String(+newIsAuth)
