@@ -15,8 +15,9 @@
               <v-list-item-action>
                 <v-checkbox
                   color="primary"
-                  :input-value="order.done"
-                  @click="markDone(order.id)"
+                  :value="order.id"
+                  v-model="markedOrders"
+                  @click.prevent="markDone(order.id)"
                 ></v-checkbox>
               </v-list-item-action>
               <v-list-item-content>
@@ -73,6 +74,17 @@ export default {
     },
     loading () {
       return this.$store.getters.loading
+    },
+    markedOrders: {
+      get () {
+        const doneOrders = this.$store.getters.doneOrders
+        const out = []
+        doneOrders.forEach(order => {
+          out.push(order.id)
+        })
+        return out
+      },
+      set () {}
     }
   },
   created () {

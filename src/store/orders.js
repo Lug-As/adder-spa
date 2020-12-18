@@ -46,13 +46,12 @@ export default {
       state.orders = payload
     },
     markDone (state, id) {
-      console.log('Mark', id)
-      // state.orders = state.orders.map(order => {
-      //   if (order.id === id) {
-      //     order.done = true
-      //   }
-      //   return order
-      // })
+      state.orders = state.orders.map(order => {
+        if (order.id === id) {
+          order.done = true
+        }
+        return order
+      })
     }
   },
   actions: {
@@ -90,7 +89,6 @@ export default {
       getters
     }) {
       if (!getters.userCheck) return
-      console.log('Load orders')
       commit('setError')
       commit('setLoading', true)
       try {
