@@ -13,15 +13,10 @@
           >
             <template>
               <v-list-item-action>
-                <!--                <v-checkbox-->
-                <!--                  color="primary"-->
-                <!--                  :value="order.id"-->
-                <!--                  v-model="markedOrders"-->
-                <!--                  @click.prevent="markDone(order.id)"-->
-                <!--                ></v-checkbox>-->
                 <v-btn
                   small
                   :color="order.done ? 'primary' : ''"
+                  :title="order.done ? 'This order already viewed' : 'Mark this order viewed'"
                   @click.prevent="markDone(order.id)"
                 >
                   <v-icon>mdi-eye</v-icon>
