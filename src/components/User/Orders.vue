@@ -13,12 +13,19 @@
           >
             <template>
               <v-list-item-action>
-                <v-checkbox
-                  color="primary"
-                  :value="order.id"
-                  v-model="markedOrders"
+                <!--                <v-checkbox-->
+                <!--                  color="primary"-->
+                <!--                  :value="order.id"-->
+                <!--                  v-model="markedOrders"-->
+                <!--                  @click.prevent="markDone(order.id)"-->
+                <!--                ></v-checkbox>-->
+                <v-btn
+                  small
+                  :color="order.done ? 'primary' : ''"
                   @click.prevent="markDone(order.id)"
-                ></v-checkbox>
+                >
+                  <v-icon>mdi-eye</v-icon>
+                </v-btn>
               </v-list-item-action>
               <v-list-item-content>
                 <v-list-item-title>{{ order.name }}</v-list-item-title>
@@ -62,7 +69,18 @@ import { offerLinkMixin } from '@/mixins'
 export default {
   methods: {
     markDone (orderId) {
-      this.$store.dispatch('markDone', orderId)
+      if (!this.isActive(orderId)) {
+        this.$store.dispatch('markDone', orderId)
+      }
+    },
+    isActive (id) {
+      let active = false
+      this.orders.forEach(order => {
+        if (order.id === id && order.done) {
+          active = true
+        }
+      })
+      return active
     }
   },
   computed: {
@@ -74,17 +92,6 @@ export default {
     },
     loading () {
       return this.$store.getters.loading
-    },
-    markedOrders: {
-      get () {
-        const doneOrders = this.$store.getters.doneOrders
-        const out = []
-        doneOrders.forEach(order => {
-          out.push(order.id)
-        })
-        return out
-      },
-      set () {}
     }
   },
   created () {
