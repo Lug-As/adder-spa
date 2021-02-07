@@ -14,7 +14,8 @@
                 v-model.trim="email"
                 :error-messages="emailErrors"
                 required
-                @blur="$v.email.$touch()"
+                @blur="$v.email.$touch"
+                @input="$v.email.$dirty ? $v.email.$reset() : null"
               >
                 <v-icon slot="prepend">mdi-email</v-icon>
               </v-text-field>
@@ -23,7 +24,7 @@
                 :type="passwordType"
                 v-model="password"
                 :error-messages="passwordErrors"
-                @blur="$v.password.$touch()"
+                @blur="$v.password.$touch"
                 @keyup.enter="submitLoginForm"
               >
                 <v-icon slot="prepend">mdi-lock</v-icon>
